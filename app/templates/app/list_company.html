@@ -1,0 +1,15 @@
+{% extends 'app/base.html' %}
+{% block content %}
+	{% include 'app/nav.html' %}
+	{% if companies %}
+		<ul class="list-group">
+			{% for company in companies %}
+				<li class="list-group-item">{{ company.name }}</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<div class="alert alert-primary">
+			Não existem projetos cadastrados.
+		</div>
+	{% endif %}
+{% endblock %}

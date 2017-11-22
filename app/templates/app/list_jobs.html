@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% block content %}
+	{% include 'app/nav.html' %}
+	{% if jobs %}
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Empresa</th>
+					<th>Criação</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for job in jobs %}
+				<tr>
+					<td>{{ job.name }}</td>
+					<td>{{ job.company }}</td>
+					<td>{{ job.created_at }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<div class="alert alert-primary">
+			Não existem projetos cadastrados.
+		</div>
+	{% endif %}
+{% endblock %}
