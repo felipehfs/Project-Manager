@@ -8,6 +8,7 @@
 					<th>Name</th>
 					<th>Empresa</th>
 					<th>Criação</th>
+					<th>Ações</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -16,6 +17,13 @@
 					<td>{{ job.name }}</td>
 					<td>{{ job.company }}</td>
 					<td>{{ job.created_at }}</td>
+					<td>
+						<a href="" class="btn btn-primary">Atualizar</a>
+						<form action="{% url 'delete_job' job.pk %}" method="POST" style="display: inline;">
+							{% csrf_token %}
+							<input class="btn btn-danger" type="submit" value="Remover">
+						</form>
+					</td>
 				</tr>
 			{% endfor %}
 			</tbody>
