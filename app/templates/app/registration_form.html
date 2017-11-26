@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6 offset-md-3">
+				{% if errors %}
+					<div class="alert alert-danger">
+						{{ errors }}
+					</div>
+				{% endif %}
+				<fieldset>
+					<legend>Registro</legend>
+					<form action="{% url 'register' %}" method="POST">
+						{% csrf_token %}
+						{% for field in form %}
+						<div class="form-group">
+							{{ field.label}}
+							{{ field }}
+						</div>
+						{% endfor %}
+						<input type="submit" class="btn btn-success" value="Register">
+					</form>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+{% endblock %}

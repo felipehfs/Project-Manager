@@ -1,20 +1,44 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, View
 from django.views.generic.edit import FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
 from .models import Company, Job
-from .forms import JobForm, CompanyForm 
-from django.views.decorators.csrf import csrf_protect
+from .forms import JobForm, CompanyForm, UserForm 
+
+class UserFormView(View):
+	form_class = UserForm
+	template_name = "app/registration_form.html"
+
+	# display the blank form
+	def get(self, request):
+		form = self.form_class(None)
+		return render(request, self.template_name, {'form': form})
+
+	# process the form data
+	def post(self, request):
+		form = self.form_class(request.POST)
+		if form.is_valid():
+
+			user = form.save(commit=False)
+			
+			# Normalize the data
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password']
+			user.set_password(password)
+			user.save()
+			login(request, user)
+			return redirect('all_jobs')
+		msg = "Campos invalidos!. Preencha uma senha de no mínimo 8 caracteres com dígitos e letras"
+		return render(request, self.template_name, {'form': form, 'errors': msg })
 
 # Create your views here.
 def index(request):
 	return render(request, 'app/index.html', {})
 
-@csrf_protect
 @login_required(login_url="index")
 def all_jobs(request):
 	jobs = Job.objects.all()
