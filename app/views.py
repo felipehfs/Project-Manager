@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 from django.views.generic.edit import FormView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -54,6 +54,24 @@ class JobCreateView(LoginRequiredMixin, FormView):
 		context['username'] = self.request.user.username
 
 		return context
+
+class JobUpdateView(LoginRequiredMixin, UpdateView):
+	login_url = "index"
+	redirect_field_name = 'redirect_to'
+
+	model = Job
+	template_name = "app/create_form.html"
+	form_class = JobForm
+	success_url = "/jobs/all"
+
+class CompanyUpdateView(LoginRequiredMixin, UpdateView):
+	login_url = "index"
+	redirect_field_name = "redirect_to"
+
+	model = Company
+	template_name = "app/create_form.html"
+	form_class = CompanyForm
+	success_url = "/jobs/company"
 
 class CompanyCreateView(LoginRequiredMixin, FormView):
 	login_url="index"

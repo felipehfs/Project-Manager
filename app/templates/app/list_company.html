@@ -6,6 +6,7 @@
 			{% for company in companies %}
 				<li class="list-group-item">
 					{{ company.name }}
+					<a href="{% url 'edit_company' company.pk %}" class="btn btn-primary">Editar</a>
 					 <form action="{% url 'delete_company' company.pk %}" method="POST" style="display: inline;">
 					 	{% csrf_token %}
 						<input class="btn btn-danger" type="submit" value="Remover">
@@ -15,7 +16,7 @@
 		</ul>
 	{% else %}
 		<div class="alert alert-primary">
-			Não existem empresas cadastrados.
+			Não existem empresas cadastradas.
 		</div>
 	{% endif %}
 {% endblock %}
