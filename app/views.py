@@ -41,7 +41,7 @@ def index(request):
 
 @login_required(login_url="index")
 def all_jobs(request):
-	jobs = Job.objects.all()
+	jobs = Job.objects.filter(author=request.user)
 	return render(request, 'app/list_jobs.html', {'jobs': jobs, 'username': request.user.username})
 
 class JobDeleteView(DeleteView):
@@ -55,10 +55,12 @@ class CompanyListView(LoginRequiredMixin, ListView):
 	redirect_field_name = 'redirect_to'
 	template_name = "app/list_company.html"
 
+	def get_queryset(self):
+		return Company.objects.filter(author=self.request.user)
+
 	def get_context_data(self, **kwargs):
 		context = super(CompanyListView, self).get_context_data(**kwargs)
 		context['username'] = self.request.user.username
-
 		return context
 
 class JobCreateView(LoginRequiredMixin, FormView):
@@ -70,6 +72,7 @@ class JobCreateView(LoginRequiredMixin, FormView):
 	success_url = "/jobs/all"
 
 	def form_valid(self, form):
+		form.instance.author = self.request.user 
 		form.save()
 		return super(JobCreateView, self).form_valid(form)
 
@@ -106,6 +109,7 @@ class CompanyCreateView(LoginRequiredMixin, FormView):
 	success_url = "/jobs/all"
 
 	def form_valid(self, form):
+		form.instance.author = self.request.user
 		form.save()
 		return super(CompanyCreateView, self).form_valid(form)
 
